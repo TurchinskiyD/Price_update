@@ -1,29 +1,30 @@
 import xlrd
-import time
 
-start = time.time()
-# завантажити книгу Excel з файлу
-workbook = xlrd.open_workbook("price/norfin.xls")
 
-# отримати активний аркуш
-worksheet = workbook.sheet_by_index(0)
+def norf_file_operation():
+    # завантажити книгу Excel з файлу
+    workbook = xlrd.open_workbook("price/norfin.xls")
 
-# створити порожній словник для зберігання даних
-data_norf = {}
+    # отримати активний аркуш
+    worksheet = workbook.sheet_by_index(0)
 
-# прочитати дані з кожного рядка (крім першого, який містить заголовки стовпців)
-for row in range(16, worksheet.nrows):
-    # створити словник з даних рядка
+    # створити порожній словник для зберігання даних
+    data_norf = {}
 
-    if worksheet.cell_value(row, 3) == "Да" or worksheet.cell_value(row, 3) == 'Нет':
-        available = 'В наявності'
-    else:
-        available = 'Немає в наявності'
+    # прочитати дані з кожного рядка (крім першого, який містить заголовки стовпців)
+    for row in range(16, worksheet.nrows):
+        # створити словник з даних рядка
 
-    item_data = {"available": available, "price": worksheet.cell_value(row, 9)}
-    data_norf[str(worksheet.cell_value(row, 1))] = item_data
+        if worksheet.cell_value(row, 3) == "Да" or worksheet.cell_value(row, 3) == 'Нет':
+            available = 'В наявності'
+        else:
+            available = 'Немає в наявності'
 
-print(data_norf)
-end = time.time() - start
-print(len(data_norf))
-print(f'Файл "norfin.xls" перезаписано. Час виконання {int(end)} секунд.')
+        item_data = {"available": available, "price": worksheet.cell_value(row, 9)}
+        data_norf[str(worksheet.cell_value(row, 1))] = item_data
+
+    return data_norf
+
+
+# print(norf_file_operation())
+

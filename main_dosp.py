@@ -1,32 +1,29 @@
 import xml.etree.ElementTree as ET
-import urllib.request
-import time
-
-start = time.time()
-url_dosp = 'https://uabest.com.ua/content/export/36.xml'
-urllib.request.urlretrieve(url_dosp, 'price/dospehi.xml')
 
 
-tree_dosp = ET.parse('price/dospehi.xml')
-root_dosp = tree_dosp.getroot()
+def dosp_file_operation():
 
-data_dosp = {}
+    tree_dosp = ET.parse('price/dospehi.xml')
+    root_dosp = tree_dosp.getroot()
 
-for offer_dosp in root_dosp.findall('./shop/offers/offer'):
-    vendor_code_dosp = offer_dosp.find('vendorCode').text
-    offer_data_dosp = {}
+    data_dosp = {}
 
-    if offer_dosp.get('available') == "true":
-        offer_data_dosp['available'] = "В наявності"
-    else:
-        offer_data_dosp['available'] = 'Немає в наявності'
+    for offer_dosp in root_dosp.findall('./shop/offers/offer'):
+        vendor_code_dosp = offer_dosp.find('vendorCode').text
+        offer_data_dosp = {}
 
-    offer_data_dosp['price'] = float(offer_dosp.find('price').text)
-    offer_data_dosp['name'] = offer_dosp.find('name').text
+        if offer_dosp.get('available') == "true":
+            offer_data_dosp['available'] = "В наявності"
+        else:
+            offer_data_dosp['available'] = 'Немає в наявності'
 
-    data_dosp[vendor_code_dosp] = offer_data_dosp
+        offer_data_dosp['price'] = float(offer_dosp.find('price').text)
+        offer_data_dosp['name'] = offer_dosp.find('name').text
 
-print(data_dosp)
-print(len(data_dosp))
-end = time.time() - start
-print(f'Файл "dospehi.xml" перезаписано. Час виконання {int(end)} секунд.')
+        data_dosp[vendor_code_dosp] = offer_data_dosp
+
+    return data_dosp
+
+
+# print(dosp_file_operation())
+

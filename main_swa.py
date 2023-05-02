@@ -1,33 +1,28 @@
 import requests
 import openpyxl
 
-# посилання на файл
-url = "https://sva.com.ua/content/export/80.xlsx"
 
-# виконати запит GET до сервера та отримати відповідь
-response = requests.get(url)
+def swa_file_operation():
+    # завантажити книгу Excel з файлу
+    wb = openpyxl.load_workbook(filename="price/swa.xlsx")
 
-# зберегти вміст відповіді в файл
-with open("price/swa.xlsx", "wb") as f:
-    f.write(response.content)
+    # отримати активний аркуш
+    ws = wb.active
 
-# завантажити книгу Excel з файлу
-wb = openpyxl.load_workbook(filename="price/swa.xlsx")
+    # створити порожній словник для зберігання даних
+    data_swa = {}
 
-# отримати активний аркуш
-ws = wb.active
+    # прочитати дані з кожного рядка (крім першого, який містить заголовки стовпців)
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        # створити словник з даних рядка
+        item_data = {"available": row[13], "price": row[7]}
 
-# створити порожній словник для зберігання даних
-data_swa = {}
+        # додати словник до словника даних, використовуючи артикул як ключ
+        data_swa[str(row[0])] = item_data
 
-# прочитати дані з кожного рядка (крім першого, який містить заголовки стовпців)
-for row in ws.iter_rows(min_row=2, values_only=True):
-    # створити словник з даних рядка
-    item_data = {"available": row[13], "price": row[7]}
+    return data_swa
 
-    # додати словник до словника даних, використовуючи артикул як ключ
-    data_swa[str(row[0])] = item_data
 
-# вивести словник даних
-print(data_swa)
-print(len(data_swa))
+# print(swa_file_operation())
+
+

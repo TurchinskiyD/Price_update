@@ -1,0 +1,15 @@
+/.idea
+/venv
+simile_data.py
+output.xlsx
+price_update.xlsx
+price_update_xlsx.xlsx
+main_xml.py
+/price/atlantmarket.xml
+/price/dospehi.xml
+/price/norfin.xls
+/price/outfitter.xlsx
+/price/shambala.xls
+/price/swa.xlsx
+/price/tramp.xlsx
+for_update.py
