@@ -12,4 +12,4 @@ main_xml.py
 /price/shambala.xls
 /price/swa.xlsx
 /price/tramp.xlsx
-for_update.py
+load_atl_goods.py
