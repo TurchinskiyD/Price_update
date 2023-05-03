@@ -1,4 +1,8 @@
-import os, main_adr, main_atl, main_dosp, main_kemp, main_norf, main_shamb, main_swa, main_trp, main_xls, requests
+import main_adr, main_atl, main_dosp, main_kemp, main_norf, main_shamb, main_swa, main_trp, main_outfit
+import xml.etree.ElementTree as ET
+import os
+import openpyxl
+import requests
 
 
 def download_file(url, name):
@@ -19,7 +23,7 @@ def download_file(url, name):
         print(f'Виникла помилка під час завантаження {name}: {str(e)}')
 
 
-data_for_update = main_xls.data_outfitter
+data_for_update = main_outfit.outfit_file_operation()
 
 
 def add_for_update(name, dictionary):
@@ -32,6 +36,32 @@ def add_for_update(name, dictionary):
             counter += 1
     print(f"В каталозі аутфіттер оновлено {counter} товарів. "
           f"Загльна кількість товарів в прайсі {name} {len(dictionary)} елементів.")
+
+
+def create_price_xlsx(data_outfitter):
+    workbook = openpyxl.Workbook()
+
+    # вибираємо активний лист
+    worksheet = workbook.active
+
+    # додаємо заголовки стовпців
+    worksheet['A1'] = 'Артикул'
+    worksheet['B1'] = 'Наявність'
+    worksheet['C1'] = 'Ціна'
+    worksheet['D1'] = 'Назва'
+
+    keys = list(data_outfitter.keys())
+
+    for i in range(len(keys)):
+        key = keys[i]
+
+        row_num = i + 2  # рядок для запису даних, починаємо з другого рядка
+        worksheet.cell(row=row_num, column=1, value=key)
+        worksheet.cell(row=row_num, column=2, value=data_outfitter[key]['available'])
+        worksheet.cell(row=row_num, column=3, value=data_outfitter[key]['price'])
+        worksheet.cell(row=row_num, column=4, value=data_outfitter[key]['name'])
+
+    workbook.save("price_update.xlsx")
 
 
 if __name__ == "__main__":
@@ -64,4 +94,5 @@ if __name__ == "__main__":
         result_dict = func()
         add_for_update(name_func, result_dict)
 
-# print(data_for_update)
+    create_price_xlsx(data_for_update)
+
